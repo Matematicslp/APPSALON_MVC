@@ -1,0 +1,23 @@
+{
+    "name": "leninponce/appsalon",
+    "description": "Proyecto PHP 8 MVC",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\" : "./",
+            "Controllers\\" : "./controllers",
+            "Model\\" : "./models",
+            "Classes\\" : "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matematicslp",
+            "email": "97331008+Matematicslp@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.6",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}
