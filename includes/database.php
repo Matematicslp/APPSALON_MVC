@@ -1,6 +1,6 @@
 <?php
 
- $db = mysqli_connect('212.1.208.201','u795211952_admin','Isaac2901','u795211952_appsalon_mvc');
+ $db = mysqli_connect('localhost','u795211952_admin','Isaac2901','u795211952_appsalon_mvc');
 
  if (!$db) {
      echo "Error: No se pudo conectar a MySQL.";
