@@ -5,3 +5,6 @@ gulpfile.js
 package.json
 package-lock.json
 .DS_Store
+includes/.env
+includes/database.php
+
