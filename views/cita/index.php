@@ -1,5 +1,5 @@
-<h1 class="nombre-pagina">Crear nueva cita</h1>
-<p class="descripcion-pagina">Elige tus servicios y coloca tus datos</p>
+<h1 class="nombre-pagina">Administración</h1>
+<p class="descripcion-pagina">Asistencia de alumnos</p>
 
 <?php
     include_once __DIR__ . '/../templates/barra.php';
@@ -7,18 +7,18 @@
 
 <div id="app">
     <nav class="tabs">
-        <button class="actual" type="button" data-paso="1">Servicios</button>
-        <button type="button" data-paso="2">Información cita</button>
-        <button type="button" data-paso="3">Resumen</button>
+        <button class="actual" type="button" data-paso="1">Código QR</button>
+        <button type="button" data-paso="2">Nombre</button>
+        <button type="button" data-paso="3">Número control</button>
     </nav>
     <div id="paso-1" class="seccion">
-        <h2>Servicios</h2>
-        <p class="text-center">Elige tus servicios a continuación</p>
+        <h2>Código QR</h2>
+        <p class="text-center">Escanea la credencial del alumno:</p>
         <div id="servicios" class="listado-servicios"></div>
     </div>
     <div id="paso-2" class="seccion">
-        <h2>Tus datos y cita</h2>
-        <p class="text-center">Coloca tus datos y fecha de cita</p>
+        <h2>Busca el nombre del alumno:</h2>
+        <p class="text-center">Selecciona el grado:</p>
         <form class="formulario">
             <div class="campo">
                 <label for="nombre">Nombre:</label>
@@ -49,8 +49,8 @@
         </form>
     </div>
     <div id="paso-3" class="seccion contenido-resumen">
-        <h2>Resumen</h2>
-        <p class="text-center">Verifica que la información sea correcta</p>
+        <h2>Número de control:</h2>
+        <p class="text-center">Escribe el número de control:</p>
     </div>
 
     <div class="paginacion">
