@@ -75,7 +75,7 @@ use Model\Usuario;
 
                         // Enviar el email
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                        $email->enviarInstrucciones();
+                        $email->enviarInstrucciones($auth->email);
 
                         // Alerta de exito
                         Usuario::setAlerta('exito', 'Revisa tu email');
@@ -155,7 +155,7 @@ use Model\Usuario;
 
                         // Enviar el email
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                        $email->enviarConfirmacion();
+                        $email->enviarConfirmacion($usuario->email);
 
                         // Crear el usuario
                         $resultado = $usuario->guardar();
