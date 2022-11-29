@@ -4,7 +4,7 @@
 include_once __DIR__ . '/../templates/barra.php';
 ?>
 
-<h2>Buscar citas</h2>
+<h2>Buscar registros</h2>
 
 <div class="busqueda">
     <form class="formulario">

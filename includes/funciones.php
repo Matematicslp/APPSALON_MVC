@@ -29,7 +29,7 @@ function isAuth() : void {
 }
 
 function isAdmin() : void {
-    if(!isset($_SESSION['admin'])) {
+    if($_SESSION['rol'] > "4") {
         header('Location: /');
     }
 }

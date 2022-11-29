@@ -24,16 +24,28 @@ use Model\Usuario;
                             // Autenticar el usuario
                             session_start();
                             $_SESSION['id'] = $usuario->id;
-                            $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apellido;
+                            $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apaterno;
                             $_SESSION['email'] = $usuario->email;
                             $_SESSION['login'] = true;
 
                             // Redireccionamiento
-                            if($usuario->admin === "1") {
-                                $_SESSION['admin'] = $usuario->admin ?? null;
-                                header('Location: /admin');
+                            if($usuario->rol === "1" || $usuario->rol === "2") {
+                                $_SESSION['rol'] = $usuario->rol ?? null;
+                                header('Location: /asistencia');
+                            } elseif($usuario->rol === "3") {
+                                $_SESSION['rol'] = $usuario->rol ?? null;
+                                header('Location: /control');
+                            } elseif($usuario->rol === "4") {
+                                $_SESSION['rol'] = $usuario->rol ?? null;
+                                header('Location: /prefectura');
+                            } elseif($usuario->rol === "5") {
+                                $_SESSION['rol'] = $usuario->rol ?? null;
+                                header('Location: /docente');
+                            } elseif($usuario->rol === "6")  {
+                                $_SESSION['rol'] = $usuario->rol ?? null;
+                                header('Location: /inicio');
                             } else {
-                                header('Location: /cita');
+                                header('Location: /');
                             }
                         }
                     } else {
@@ -75,7 +87,7 @@ use Model\Usuario;
 
                         // Enviar el email
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                        $email->enviarInstrucciones($auth->email);
+                        $email->enviarInstrucciones();
 
                         // Alerta de exito
                         Usuario::setAlerta('exito', 'Revisa tu email');
@@ -155,7 +167,7 @@ use Model\Usuario;
 
                         // Enviar el email
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                        $email->enviarConfirmacion($usuario->email);
+                        $email->enviarConfirmacion();
 
                         // Crear el usuario
                         $resultado = $usuario->guardar();
@@ -183,8 +195,7 @@ use Model\Usuario;
             $alertas = [];
             $token = s($_GET['token']);
             $usuario = Usuario::where('token', $token);
-
-            if(empty($usuario)) {
+            if(empty($usuario) || !$_GET['token']) {
                 // Mostrar mensaje de error
                 Usuario::setAlerta('error', 'Token no válido');
             } else {

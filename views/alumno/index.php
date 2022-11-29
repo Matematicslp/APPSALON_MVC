@@ -1,0 +1,70 @@
+<h1 class="nombre-pagina">Administración</h1>
+<p class="descripcion-pagina">Control Escolar</p>
+
+<?php
+include_once __DIR__ . '/../templates/barra.php';
+?>
+
+<div id="app">
+    <nav class="tabs">
+        <button class="actual" type="button" data-paso="1">Código QR</button>
+        <button type="button" data-paso="2">Nombre</button>
+        <button type="button" data-paso="3">Número control</button>
+    </nav>
+    <div id="paso-1" class="seccion">
+        <h2>Código QR</h2>
+        <p class="text-center">Escanea la credencial del alumno:</p>
+
+        <form method="POST" class="formulario">
+            <div class="campo">
+                <label for="qr">Código:</label>
+                <input autofocus id="qr" type="text" placeholder="Código QR" value="" selected />
+            </div>
+            <input hidden type="submit" class="boton" value="Buscar">
+
+        </form>
+
+    </div>
+    <div id="paso-2" class="seccion">
+        <h2>Busca el nombre del alumno:</h2>
+        <p class="text-center">Selecciona el grado:</p>
+        <form class="formulario">
+            <div class="campo">
+                <label for="nombre">Nombre:</label>
+                <input id="nombre" type="text" placeholder="Tu nombre" value="<?php echo $nombre; ?>" disabled />
+            </div>
+            <div class="campo">
+                <label for="fecha">Fecha:</label>
+                <input id="fecha" type="date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" />
+            </div>
+            <div class="campo">
+                <label for="hora">Hora:</label>
+                <input id="hora" type="time" />
+            </div>
+            <input type="hidden" id="id" value="<?php echo $id; ?>">
+        </form>
+    </div>
+    <div id="paso-3" class="seccion contenido-resumen">
+        <h2>Número de control:</h2>
+        <p class="text-center">Escribe el número de control:</p>
+    </div>
+
+    <!-- <div class="paginacion">
+        <button
+            id="anterior"
+            class="boton"
+        >&laquo; Anterior</button>
+        <button
+            id="siguiente"
+            class="boton"
+        >Siguiente &raquo;</button>
+    </div> -->
+</div>
+
+<?php
+$script = "
+        <script src='//cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <script src='build/js/app.js'></script>
+    ";
+
+?>

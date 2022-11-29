@@ -22,23 +22,25 @@ class Email {
         $this->token = $token;
         $this->host = 'smtp.hostinger.com';
         $this->port = 465;
-        $this->user = 'escandon@matemaatics.click';
+        $this->user = 'escandon@matematics.click';
         $this->pass = 'Isaac2901!';
-        $this->servidor = 'localhost';
+        $this->servidor = $_SERVER['SERVER_NAME'];
     }
 
-    public function enviarConfirmacion($email) {
+    public function enviarConfirmacion() {
         // Crear el objeto de Email
 
         $mail = new PHPMailer();
         $mail->isSMTP();
+        $mail->SMTPDebug = 0;
         $mail->Host = $this->host;
         $mail->SMTPAuth = true;
         $mail->Port = $this->port;
         $mail->Username = $this->user;
         $mail->Password = $this->pass;
-        $mail->setFrom('admin@secundariaescandon.com');
-        $mail->addAddress($email, 'secundariaescandon.com');
+        $mail->SMTPSecure = 'ssl';
+        $mail->setFrom('escandon@matematics.click','secundariaescandon.com');
+        $mail->addAddress($this->email);
         $mail->Subject = "Confirma tu cuenta";
 
         // Set HTML
@@ -47,7 +49,7 @@ class Email {
 
         $contenido = "<html>";
         $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Has creado tu cuenta en AppSalon, sólo debes confirmarla en el siguiente enlace</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://<?php echo $this->servidor; ?>/confirmar-cuenta?token=" . $this->token . "'>Confirmar cuenta</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='http://localhost:3000/confirmar-cuenta?token=" . $this->token."'>Confirmar cuenta</a></p>";
         $contenido .= "<p>Si tu no solicitaste esta cuenta, puedes ignorar el mensaje</p>";
         $contenido .= "</html>";
 
@@ -57,16 +59,18 @@ class Email {
         $mail->send();
     }
 
-    public function enviarInstrucciones($email) {
+    public function enviarInstrucciones() {
         $mail = new PHPMailer();
         $mail->isSMTP();
+        $mail->SMTPDebug = 0;
         $mail->Host = $this->host;
         $mail->SMTPAuth = true;
         $mail->Port = $this->port;
         $mail->Username = $this->user;
         $mail->Password = $this->pass;
-        $mail->setFrom('admin@secundariaescandon.com');
-        $mail->addAddress($email, 'secundariaescandon.com');
+        $mail->SMTPSecure = 'ssl';
+        $mail->setFrom('escandon@matematics.click','secundariaescandon.com');
+        $mail->addAddress($this->email);
         $mail->Subject = "Reestablece tu password";
 
         // Set HTML
@@ -75,7 +79,7 @@ class Email {
 
         $contenido = "<html>";
         $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Has solicitado reestablecer tu password.</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://<?php echo $this->servidor; ?>/recuperar?token=" . $this->token . "'>Reestablecer password</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='http://localhost:3000/recuperar?token=" . $this->token."'>Reestablecer password</a></p>";
         $contenido .= "<p>Si tu no solicitaste esta cuenta, puedes ignorar el mensaje</p>";
         $contenido .= "</html>";
 

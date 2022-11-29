@@ -8,6 +8,7 @@ use Controllers\CitaController;
 use Controllers\AdminController;
 use Controllers\LoginController;
 use Controllers\ServicioController;
+use Controllers\AsistenciaController;
 
 $router = new Router();
 
@@ -33,6 +34,15 @@ $router->get('/mensaje', [LoginController::class, 'mensaje']);
 // AREA PRIVADA
 $router->get('/cita', [CitaController::class, 'index']);
 $router->get('/admin', [AdminController::class, 'index']);
+
+// Asistencia
+$router->get('/asistencia', [AsistenciaController::class, 'index']);
+$router->post('/asistencia', [AsistenciaController::class, 'index']);
+
+// Alumnos
+$router->get('/alumno', [AlumnoController::class, 'index']);
+$router->post('/alumno', [AlumnoController::class, 'index']);
+
 
 // API de citas
 $router->get('/api/servicios', [APIController::class, 'index']);

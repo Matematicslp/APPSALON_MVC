@@ -7,7 +7,7 @@
 
 <form class="formulario" method="POST" action="/crear-cuenta">
     <div class="campo">
-    <label nombre">Nombre</label>
+    <label for="nombre">Nombre</label>
         <input
             type="text"
             id="nombre"
@@ -17,17 +17,27 @@
         />
     </div>
     <div class="campo">
-    <label apellido">Apellido</label>
+    <label for="apaterno">Apellido paterno:</label>
         <input
             type="text"
-            id= "apellido"
-            name= "apellido"
+            id= "apaterno"
+            name= "apaterno"
             placeholder="Tu apellido"
-            value="<?php echo s($usuario->apellido); ?>"
+            value="<?php echo s($usuario->apaterno); ?>"
         />
     </div>
     <div class="campo">
-    <label telefono">Teléfono</label>
+    <label for="amaterno">Apellido materno:</label>
+        <input
+            type="text"
+            id= "amaterno"
+            name= "amaterno"
+            placeholder="Tu apellido materno"
+            value="<?php echo s($usuario->amaterno); ?>"
+        />
+    </div>
+    <div class="campo">
+    <label for="telefono">Teléfono</label>
         <input
             type="tel"
             id= "telefono"
