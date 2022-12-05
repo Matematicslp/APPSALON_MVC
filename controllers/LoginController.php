@@ -90,7 +90,8 @@ use Model\Usuario;
                         $email->enviarInstrucciones();
 
                         // Alerta de exito
-                        Usuario::setAlerta('exito', 'Revisa tu email');
+                        Usuario::setAlerta('exito','Hemos enviado las instrucciones a tu email');
+                        header('Location: /mensaje?email='. $usuario->email);
                     } else {
                         Usuario::setAlerta('error', 'El usuario no existe o no está confirmado');
                     }
@@ -105,39 +106,45 @@ use Model\Usuario;
         }
 
         public static function recuperar(Router $router) {
-
             $alertas = [];
-            $error = false;
-            $token = s($_GET['token']);
-
-            // Buscar usuario por su token
-            $usuario = Usuario::where('token', $token);
-
-            if(empty($usuario)) {
-                Usuario::setAlerta('error','Token no válido');
-                $error = true;
-            }
-
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Leer el nuevo password y guardarlo
-                $password = new Usuario($_POST);
-                $alertas = $password->validarPassword();
-
-                if(empty($alertas)) {
-                    $usuario->password = null;
-                    $usuario->password = $password->password;
-                    $usuario->hashPassword();
-                    $usuario->token = null;
-                    $resultado = $usuario->guardar();
-                    if($resultado) {
+                $email = s($_POST['email']);
+            } else {
+                $email = '';
+                $email = s($_GET['email']);
+                if(!$email) header('Location: /');
+            }
+    
+            // Encontrar al usuario con el email
+            $usuario = Usuario::where('email', $email);
+            if(empty($usuario)) {
+                // No se encontró el usuario con ese email
+                Usuario::setAlerta('error', 'Usuario no encontrado');
+            } else {
+                // Confirmar la cuenta
+                if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+                    // Añadir el nuevo password
+                    $usuario->sincronizar($_POST);
+    
+                    // Validar el password
+                    $alertas = $usuario->validarPassword();
+    
+                    if(empty($alertas)) {
+                        // Hashear el nuevo password
+                        $usuario->hashPassword();
+    
+                        // Guardar el usuario en la BD
+                        $usuario->guardar();
+    
+                        // Redireccionar
                         header('Location: /');
                     }
                 }
             }
             $alertas = Usuario::getAlertas();
             $router->render('auth/recuperar-password', [
-                'alertas' => $alertas,
-                'error' => $error
+                'alertas' => $alertas
             ]);
         }
 
@@ -153,30 +160,30 @@ use Model\Usuario;
 
                 // Revisar que alertas esté vacío
                 if(empty($alertas)) {
-                    // Verificar que el usuario no esté registrado
-                    $resultado = $usuario->existeUsuario();
-
-                    if($resultado->num_rows) {
+                    $existeUsuario = Usuario::where('email', $usuario->email);
+                    if($existeUsuario) {
+                        Usuario::setAlerta('error','El usuario ya está registrado');
                         $alertas = Usuario::getAlertas();
                     } else {
                         // Hashear el password
                         $usuario->hashPassword();
 
-                        // Generar token único
+                        // Generar el token
                         $usuario->crearToken();
 
-                        // Enviar el email
+                        // Crear un nuevo usuario
+                        $resultado = $usuario->guardar();
+
+                        // Enviar Email
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
                         $email->enviarConfirmacion();
 
-                        // Crear el usuario
-                        $resultado = $usuario->guardar();
                         if($resultado) {
-                            header('Location: /mensaje');
+                            header('Location: /mensaje?email='. $usuario->email);
                         }
-
                     }
                 }
+                //debuguear($existeUsuario);
             }
             $router->render('auth/crear-cuenta', [
                 'usuario' => $usuario,
@@ -185,29 +192,51 @@ use Model\Usuario;
         }
 
         public static function mensaje(Router $router) {
-            $router->render('auth/mensaje', [
+            $nuevo = null;
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $email = s($_POST['email']);
+            } else {
+                $email = '';
+                $email = s($_GET['email']);
+                if(!$email) header('Location: /');
+            }
 
+            // Encontrar al usuario con el email
+            $usuario = Usuario::where('email', $email);
+            if(empty($usuario)) {
+                // No se encontró el usuario con ese email
+                Usuario::setAlerta('error', 'Usuario no encontrado');
+            } else {
+                if($usuario->confirmado === "0") $nuevo = 1;
+                // Confirmar la cuenta
+                if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $token = s($_POST['codigo']);
+                    if($usuario->token === $token) {
+                        $usuario->token = null;
+                        if($nuevo) {
+                            $usuario->confirmado = 1;
+                            $usuario->guardar();
+                            header('Location: /confirmar');
+                        } else {
+                            header('Location: /confirmar?email='. $usuario->email);
+                        }
+                    } else {
+                        Usuario::setAlerta('error', 'Código incorrecto');
+                    }
+                }
+            }
+            $alertas = Usuario::getAlertas();
+
+            // Render a la vista
+            $router->render('auth/mensaje', [
+                'alertas' => $alertas,
+                'email' => $email
             ]);
         }
 
         public static function confirmar(Router $router) {
 
             $alertas = [];
-            $token = s($_GET['token']);
-            $usuario = Usuario::where('token', $token);
-            if(empty($usuario) || !$_GET['token']) {
-                // Mostrar mensaje de error
-                Usuario::setAlerta('error', 'Token no válido');
-            } else {
-                // Modificar a usuario confirmado
-                $usuario->confirmado = "1";
-                $usuario->token = null;
-                $usuario->guardar();
-                Usuario::setAlerta('exito', 'Cuenta comprobada correctamente');
-            }
-
-            $alertas = Usuario::getAlertas();
-
             $router->render('auth/confirmar-cuenta', [
                 'alertas' => $alertas
             ]);

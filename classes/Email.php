@@ -48,8 +48,8 @@ class Email {
         $mail->CharSet = 'UTF-8';
 
         $contenido = "<html>";
-        $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Has creado tu cuenta en AppSalon, sólo debes confirmarla en el siguiente enlace</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost:3000/confirmar-cuenta?token=" . $this->token."'>Confirmar cuenta</a></p>";
+        $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Has creado tu cuenta en el SCE Escandón, sólo debes confirmarla,</p>";
+        $contenido .= "<p>para ello debes escribir el siguiente código: <strong>".$this->token."</strong> en la aplicación</p>";
         $contenido .= "<p>Si tu no solicitaste esta cuenta, puedes ignorar el mensaje</p>";
         $contenido .= "</html>";
 
@@ -78,9 +78,9 @@ class Email {
         $mail->CharSet = 'UTF-8';
 
         $contenido = "<html>";
-        $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Has solicitado reestablecer tu password.</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost:3000/recuperar?token=" . $this->token."'>Reestablecer password</a></p>";
-        $contenido .= "<p>Si tu no solicitaste esta cuenta, puedes ignorar el mensaje</p>";
+        $contenido .= "<p><strong>Hola ". $this->nombre ."</strong> Parece que has olvidado tu password, debes crear uno nuevo,</p>";
+        $contenido .= "<p>para ello debes escribir el siguiente código: <strong>".$this->token."</strong> en la aplicación</p>";
+        $contenido .= "<p>Si tu no solicitaste este cambio, puedes ignorar el mensaje</p>";
         $contenido .= "</html>";
 
         $mail->Body = $contenido;

@@ -76,6 +76,9 @@ class Usuario extends ActiveRecord {
         if(!$this->email) {
             self::$alertas['error'][] = "El email es obligatorio";
         }
+        if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$alertas['error'][] = 'El Email no es válido';
+        }
         return self::$alertas;
     }
 
@@ -105,7 +108,7 @@ class Usuario extends ActiveRecord {
     }
 
     public function crearToken() {
-        $this->token = uniqid();
+        $this->token = strval(rand(123456,999999));
     }
 
     public function comprobarPasswordAndVerificado($password) {
