@@ -1,7 +1,6 @@
 <?php
 
 namespace Classes;
-
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Email {
@@ -22,7 +21,7 @@ class Email {
         $this->token = $token;
         $this->host = 'smtp.hostinger.com';
         $this->port = 465;
-        $this->user = 'escandon@matematics.click';
+        $this->user = 'admin@escandon.matematics.click';
         $this->pass = 'Isaac2901!';
         $this->servidor = $_SERVER['SERVER_NAME'];
     }
@@ -39,7 +38,7 @@ class Email {
         $mail->Username = $this->user;
         $mail->Password = $this->pass;
         $mail->SMTPSecure = 'ssl';
-        $mail->setFrom('escandon@matematics.click','secundariaescandon.com');
+        $mail->setFrom($this->user,'secundariaescandon.com');
         $mail->addAddress($this->email);
         $mail->Subject = "Confirma tu cuenta";
 
@@ -69,7 +68,7 @@ class Email {
         $mail->Username = $this->user;
         $mail->Password = $this->pass;
         $mail->SMTPSecure = 'ssl';
-        $mail->setFrom('escandon@matematics.click','secundariaescandon.com');
+        $mail->setFrom($this->user,'secundariaescandon.com');
         $mail->addAddress($this->email);
         $mail->Subject = "Reestablece tu password";
 
