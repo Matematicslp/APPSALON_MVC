@@ -91,7 +91,9 @@ use Model\Usuario;
 
                         // Alerta de exito
                         Usuario::setAlerta('exito','Hemos enviado las instrucciones a tu email');
-                        header('Location: /mensaje?email='. $usuario->email);
+                        session_start();
+                        $_SESSION['email'] = $usuario->email;
+                        header('Location: /mensaje');
                     } else {
                         Usuario::setAlerta('error', 'El usuario no existe o no está confirmado');
                     }
@@ -110,11 +112,11 @@ use Model\Usuario;
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = s($_POST['email']);
             } else {
-                $email = '';
-                $email = s($_GET['email']);
+                session_start();
+                $email = s($_SESSION['email']);
                 if(!$email) header('Location: /');
             }
-    
+
             // Encontrar al usuario con el email
             $usuario = Usuario::where('email', $email);
             if(empty($usuario)) {
@@ -133,9 +135,11 @@ use Model\Usuario;
                     if(empty($alertas)) {
                         // Hashear el nuevo password
                         $usuario->hashPassword();
+                        $usuario->token = null;
     
                         // Guardar el usuario en la BD
                         $usuario->guardar();
+                        $_SESSION = [];
     
                         // Redireccionar
                         header('Location: /');
@@ -144,7 +148,8 @@ use Model\Usuario;
             }
             $alertas = Usuario::getAlertas();
             $router->render('auth/recuperar-password', [
-                'alertas' => $alertas
+                'alertas' => $alertas,
+                'email' => $email
             ]);
         }
 
@@ -179,7 +184,9 @@ use Model\Usuario;
                         $email->enviarConfirmacion();
 
                         if($resultado) {
-                            header('Location: /mensaje?email='. $usuario->email);
+                            session_start();
+                            $_SESSION['email'] = $usuario->email;
+                            header('Location: /mensaje');
                         }
                     }
                 }
@@ -196,8 +203,7 @@ use Model\Usuario;
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = s($_POST['email']);
             } else {
-                $email = '';
-                $email = s($_GET['email']);
+                $email = s($_SESSION['email']);
                 if(!$email) header('Location: /');
             }
 
@@ -216,9 +222,10 @@ use Model\Usuario;
                         if($nuevo) {
                             $usuario->confirmado = 1;
                             $usuario->guardar();
+                            $_SESSION = [];
                             header('Location: /confirmar');
                         } else {
-                            header('Location: /confirmar?email='. $usuario->email);
+                            header('Location: /recuperar');
                         }
                     } else {
                         Usuario::setAlerta('error', 'Código incorrecto');
@@ -236,9 +243,9 @@ use Model\Usuario;
 
         public static function confirmar(Router $router) {
 
-            $alertas = [];
-            $router->render('auth/confirmar-cuenta', [
-                'alertas' => $alertas
+
+            $router->render('auth/confirmar', [
+
             ]);
         }
     }

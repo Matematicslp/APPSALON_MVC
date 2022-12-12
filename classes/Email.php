@@ -39,7 +39,7 @@ class Email {
         $mail->Password = $this->pass;
         $mail->SMTPSecure = 'ssl';
         $mail->setFrom($this->user,'secundariaescandon.com');
-        $mail->addAddress($this->email);
+        $mail->addAddress($this->email, $this->nombre);
         $mail->Subject = "Confirma tu cuenta";
 
         // Set HTML
@@ -69,7 +69,7 @@ class Email {
         $mail->Password = $this->pass;
         $mail->SMTPSecure = 'ssl';
         $mail->setFrom($this->user,'secundariaescandon.com');
-        $mail->addAddress($this->email);
+        $mail->addAddress($this->email, $this->nombre);
         $mail->Subject = "Reestablece tu password";
 
         // Set HTML

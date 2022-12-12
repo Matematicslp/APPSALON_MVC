@@ -16,6 +16,7 @@
             placeholder="Tu nuevo password"
         />
     </div>
+    <input type="hidden" name="email" value="<?php echo $email; ?>" />
     <input type="submit" class="boton" value="Guardar nuevo password"/>
 </form>
 
